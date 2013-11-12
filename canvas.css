@@ -1,7 +1,11 @@
-canvas {
+#canvas {
 	border: 3px solid black;
 	float: left;
+	cursor: crosshair;
 }
+/*#canvas, #canvas:active, #canvas:focus {
+	cursor: crosshair;
+}*/
 #color_picker, #weight_picker {
 	float: left;
 }

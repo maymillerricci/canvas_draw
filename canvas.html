@@ -26,6 +26,20 @@
 
 			$(document).ready(function() {
 
+				// //mouse cursor test
+				// // $(document).on('click', '#purple', function() {
+				// $('body').css('cursor', 'crosshair'); 
+				// // });
+
+				// $('#canvas:active').css('cursor', 'crosshair'); 
+				
+				// $(document).on('mousedown', '#canvas', function() {
+				// 	$('#canvas').css('cursor', 'crosshair'); 
+				// });
+				// $(document).on('mousemove', '#canvas', function() {
+				// 	$('#canvas').css('cursor', 'crosshair'); 
+				// });
+
 				//set height and width of canvas
 				$('#canvas').attr({
 					width: canvasWidth,
@@ -37,6 +51,7 @@
 
 				//drawing - on mousedown
 				$(document).on('mousedown', '#canvas', function(e) {
+					e.preventDefault();
 					var mouseX = e.pageX - this.offsetLeft;
 					var mouseY = e.pageY - this.offsetTop;
 					paint = true;

@@ -2,10 +2,10 @@ canvas {
 	border: 3px solid black;
 	float: left;
 }
-#color_picker {
+#color_picker, #weight_picker {
 	float: left;
 }
-.color_choice {
+.color_choice, .line_choice {
 	width: 50px;
 	height: 50px;
 	margin: 10px;
@@ -31,4 +31,21 @@ canvas {
 	margin: 10px;
 	font-size: 1em;
 	border-radius: 10px;
+}
+.line {
+	height: 50px;
+	background-color: #660099;
+	margin: 0 auto;
+}
+#line_small {
+	width: 5px;
+}
+#line_normal {
+	width: 10px;
+}
+#line_large {
+	width: 15px;
+}
+#line_huge {
+	width: 20px;
 }

@@ -8,6 +8,12 @@
 		<script>
 
 			//set all variables
+			var canvasWidth = 600;
+			var canvasHeight = 400;
+			var clickX = new Array();
+			var clickY = new Array();
+			var clickDrag = new Array();
+			// var paint;
 			var colorPurple = '#660099';
 			var colorBlue = '#3333CC';
 			var colorGreen = '#336633';
@@ -15,12 +21,8 @@
 			var colorPink = '#CC0099';
 			var curColor = colorPurple;
 			var clickColor = new Array();
-			var canvasWidth = 600;
-			var canvasHeight = 400;
-			var clickX = new Array();
-			var clickY = new Array();
-			var clickDrag = new Array();
-			var paint;
+			var curSize = 10;
+			var clickSize = new Array();
 
 			$(document).ready(function() {
 
@@ -31,29 +33,7 @@
 				});
 
 				//set 2d context
-				context = document.getElementById('canvas').getContext("2d");
-
-				//change current color when click on color picker
-				$('#purple').click(function() {
-					curColor = colorPurple;
-				});
-				$('#blue').click(function() {
-					curColor = colorBlue;
-				});
-				$('#green').click(function() {
-					curColor = colorGreen;
-				});
-				$('#yellow').click(function() {
-					curColor = colorYellow;
-				});
-				$('#pink').click(function() {
-					curColor = colorPink;
-				});
-
-				//clear canvas whdn click clear button
-				$('#clear').click(function() {
-					clearCanvas();
-				});
+				context = document.getElementById('canvas').getContext('2d');
 
 				//drawing - on mousedown
 				$('#canvas').mousedown(function(e) {
@@ -64,7 +44,7 @@
 					redraw();
 				});
 
-				//drawing - on mouesmove
+				//drawing - on mousemove
 				$('#canvas').mousemove(function(e) {
 					if(paint) {
 						addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
@@ -89,13 +69,13 @@
 					clickY.push(y);
 					clickDrag.push(dragging);
 					clickColor.push(curColor);
+					clickSize.push(curSize);
 				}
 
 				//redraw function
 				function redraw() {
 					context.clearRect(0, 0, canvasWidth, canvasHeight);
 					context.lineJoin = "round";
-					context.lineWidth = 10;
 					for(var i=0; i<clickX.length; i++) {
 						context.beginPath();
 						if(clickDrag[i] && i) {
@@ -106,9 +86,62 @@
 						context.lineTo(clickX[i], clickY[i]);
 						context.closePath();
 						context.strokeStyle = clickColor[i];
+						context.lineWidth = clickSize[i];
 						context.stroke();
 					}
 				}
+
+				//change current color when click on colors in color picker
+				$('#purple').click(function() {
+					curColor = colorPurple;
+				});
+				$('#blue').click(function() {
+					curColor = colorBlue;
+				});
+				$('#green').click(function() {
+					curColor = colorGreen;
+				});
+				$('#yellow').click(function() {
+					curColor = colorYellow;
+				});
+				$('#pink').click(function() {
+					curColor = colorPink;
+				});
+
+				//change current font weight when click on options in font weight picker
+				$('#small').click(function() {
+					curSize = 5;
+				});
+				$('#normal').click(function() {
+					curSize = 15;
+				});
+				$('#large').click(function() {
+					curSize = 25;
+				});
+				$('#huge').click(function() {
+					curSize = 35;
+				});
+
+				//change color of font weight options depending on current color
+				$('.color_choice').click(function() {
+					if(curColor==colorPurple) {
+						$('.line').css('background-color', colorPurple);
+					} else if(curColor==colorBlue) {
+						$('.line').css('background-color', colorBlue);
+					} else if(curColor==colorGreen) {
+						$('.line').css('background-color', colorGreen);
+					} else if(curColor==colorYellow) {
+						$('.line').css('background-color', colorYellow);
+					} else if(curColor==colorPink) {
+						$('.line').css('background-color', colorPink);
+					}
+				});
+				
+
+				//clear canvas when click clear button
+				$('#clear').click(function() {
+					clearCanvas();
+				});
 
 				//clear canvas function
 				function clearCanvas()
@@ -119,12 +152,13 @@
 					clickDrag.length = 0;
 					clickColor.length = 0;
 				}
-
 			});
 		</script>
 	</head>
 	<body>
-		<canvas id="canvas" width="600" height="400"></canvas>
+		<!-- canvas -->
+		<canvas id="canvas" width="600" height="400"></canvas> 
+		<!-- color picker -->
 		<div id="color_picker">
 			<div class="color_choice" id="purple"></div>
 			<div class="color_choice" id="blue"></div>
@@ -133,6 +167,15 @@
 			<div class="color_choice" id="pink"></div>
 			<button id="clear">Clear</button>
 		</div>
-		
+		<!-- font weight picker -->
+		<div id="weight_picker">
+			<div class="line_choice" id="small"><div class="line" id="line_small"></div></div>
+			<div class="line_choice" id="normal"><div class="line" id="line_normal"></div></div>
+			<div class="line_choice" id="large"><div class="line" id="line_large"></div></div>
+			<div class="line_choice" id="huge"><div class="line" id="line_huge"></div></div>
+		</div>
+
+
+
 	</body>
 </html>

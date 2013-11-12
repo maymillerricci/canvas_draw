@@ -7,27 +7,33 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script>
 
-		var colorPurple = '#660099';
-		var colorBlue = '#3333CC';
-		var colorGreen = '#336633';
-		var colorYellow = '#FFFF33';
-		var colorPink = '#CC0099';
-		var curColor = colorPurple;
-		var clickColor = new Array();
-		var canvasWidth = 600;
-		var canvasHeight = 400;
+			//set all variables
+			var colorPurple = '#660099';
+			var colorBlue = '#3333CC';
+			var colorGreen = '#336633';
+			var colorYellow = '#FFFF33';
+			var colorPink = '#CC0099';
+			var curColor = colorPurple;
+			var clickColor = new Array();
+			var canvasWidth = 600;
+			var canvasHeight = 400;
+			var clickX = new Array();
+			var clickY = new Array();
+			var clickDrag = new Array();
+			var paint;
 
-			
 			$(document).ready(function() {
 
+				//set height and width of canvas
 				$('#canvas').attr({
 					width: canvasWidth,
 					height: canvasHeight
 				});
 
-
+				//set 2d context
 				context = document.getElementById('canvas').getContext("2d");
 
+				//change current color when click on color picker
 				$('#purple').click(function() {
 					curColor = colorPurple;
 				});
@@ -44,10 +50,12 @@
 					curColor = colorPink;
 				});
 
+				//clear canvas whdn click clear button
 				$('#clear').click(function() {
 					clearCanvas();
 				});
 
+				//drawing - on mousedown
 				$('#canvas').mousedown(function(e) {
 					var mouseX = e.pageX - this.offsetLeft;
 					var mouseY = e.pageY - this.offsetTop;
@@ -56,6 +64,7 @@
 					redraw();
 				});
 
+				//drawing - on mouesmove
 				$('#canvas').mousemove(function(e) {
 					if(paint) {
 						addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
@@ -63,19 +72,17 @@
 					}
 				});
 
+				//drawing - on mouseup
 				$('#canvas').mouseup(function(e) {
 					paint = false;
 				});
 
+				//drawing - on mouseleave
 				$('#canvas').mouseleave(function(e) {
 					paint = false;
 				});
 
-				var clickX = new Array();
-				var clickY = new Array();
-				var clickDrag = new Array();
-				var paint;
-
+				//add click function
 				function addClick(x, y, dragging)
 				{
 					clickX.push(x);
@@ -84,16 +91,11 @@
 					clickColor.push(curColor);
 				}
 
+				//redraw function
 				function redraw() {
-					// console.log(clickX)
-					// clearCanvas();
-					// context.clearRect(0, 0, context.canvas.width, context.canvas.height); //clears canvas
 					context.clearRect(0, 0, canvasWidth, canvasHeight);
-
-					// context.strokeStyle = 'slateblue';
 					context.lineJoin = "round";
 					context.lineWidth = 10;
-
 					for(var i=0; i<clickX.length; i++) {
 						context.beginPath();
 						if(clickDrag[i] && i) {
@@ -108,6 +110,7 @@
 					}
 				}
 
+				//clear canvas function
 				function clearCanvas()
 				{
 					context.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -116,12 +119,6 @@
 					clickDrag.length = 0;
 					clickColor.length = 0;
 				}
-
-
-
-
-
-
 
 			});
 		</script>
@@ -134,8 +131,7 @@
 			<div class="color_choice" id="green"></div>
 			<div class="color_choice" id="yellow"></div>
 			<div class="color_choice" id="pink"></div>
-		
-		<button id="clear">Clear</button>
+			<button id="clear">Clear</button>
 		</div>
 		
 	</body>

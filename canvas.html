@@ -36,7 +36,7 @@
 				context = document.getElementById('canvas').getContext('2d');
 
 				//drawing - on mousedown
-				$('#canvas').mousedown(function(e) {
+				$(document).on('mousedown', '#canvas', function(e) {
 					var mouseX = e.pageX - this.offsetLeft;
 					var mouseY = e.pageY - this.offsetTop;
 					paint = true;
@@ -45,7 +45,7 @@
 				});
 
 				//drawing - on mousemove
-				$('#canvas').mousemove(function(e) {
+				$(document).on('mousemove', '#canvas', function(e) {
 					if(paint) {
 						addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
 						redraw();
@@ -53,14 +53,19 @@
 				});
 
 				//drawing - on mouseup
-				$('#canvas').mouseup(function(e) {
+				$(document).on('mouseup', '#canvas', function(e) {
 					paint = false;
 				});
 
-				//drawing - on mouseleave
-				$('#canvas').mouseleave(function(e) {
+				//drawing - on mouse leaving the canvas
+				$(document).on('mouseleave', '#canvas', function(e) {
 					paint = false;
 				});
+
+				//drawing - on mouse re-entering the canvas - WORK ON THIS!!!
+				// $(document).on('mouseenter', '#canvas', function(e) {
+				// 	paint = true;
+				// });
 
 				//add click function
 				function addClick(x, y, dragging)
@@ -92,38 +97,38 @@
 				}
 
 				//change current color when click on colors in color picker
-				$('#purple').click(function() {
+				$(document).on('click', '#purple', function() {
 					curColor = colorPurple;
 				});
-				$('#blue').click(function() {
+				$(document).on('click', '#blue', function() {
 					curColor = colorBlue;
 				});
-				$('#green').click(function() {
+				$(document).on('click', '#green', function() {
 					curColor = colorGreen;
 				});
-				$('#yellow').click(function() {
+				$(document).on('click', '#yellow', function() {
 					curColor = colorYellow;
 				});
-				$('#pink').click(function() {
+				$(document).on('click', '#pink', function() {
 					curColor = colorPink;
 				});
 
 				//change current font weight when click on options in font weight picker
-				$('#small').click(function() {
+				$(document).on('click', '#small', function() {
 					curSize = 5;
 				});
-				$('#normal').click(function() {
+				$(document).on('click', '#normal', function() {
 					curSize = 15;
 				});
-				$('#large').click(function() {
+				$(document).on('click', '#large', function() {
 					curSize = 25;
 				});
-				$('#huge').click(function() {
+				$(document).on('click', '#huge', function() {
 					curSize = 35;
 				});
 
 				//change color of font weight options depending on current color
-				$('.color_choice').click(function() {
+				$(document).on('click', '.color_choice', function() {
 					if(curColor==colorPurple) {
 						$('.line').css('background-color', colorPurple);
 					} else if(curColor==colorBlue) {
@@ -137,13 +142,14 @@
 					}
 				});
 				
-
-				//clear canvas when click clear button
-				$('#clear').click(function() {
-					clearCanvas();
+				//clear canvas when click clear button (confirm first)
+				$(document).on('click', '#clear', function() {
+					if(confirm('Are you sure you want to clear the canvas?')) {
+						clearCanvas();
+					}
 				});
 
-				//clear canvas function
+				//clear canvas function - clears canvas and resets all arrays
 				function clearCanvas()
 				{
 					context.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -151,6 +157,7 @@
 					clickY.length = 0;
 					clickDrag.length = 0;
 					clickColor.length = 0;
+					clickSize.length = 0;
 				}
 			});
 		</script>

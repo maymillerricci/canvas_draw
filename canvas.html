@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>May's Canvas</title>
+		<link rel="stylesheet" href="canvas.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script>
+
+		var colorPurple = '#660099';
+		var colorBlue = '#3333CC';
+		var colorGreen = '#336633';
+		var colorYellow = '#FFFF33';
+		var colorPink = '#CC0099';
+		var curColor = colorPurple;
+		var clickColor = new Array();
+		var canvasWidth = 600;
+		var canvasHeight = 400;
+
+			
+			$(document).ready(function() {
+
+				$('#canvas').attr({
+					width: canvasWidth,
+					height: canvasHeight
+				});
+
+
+				context = document.getElementById('canvas').getContext("2d");
+
+				$('#purple').click(function() {
+					curColor = colorPurple;
+				});
+				$('#blue').click(function() {
+					curColor = colorBlue;
+				});
+				$('#green').click(function() {
+					curColor = colorGreen;
+				});
+				$('#yellow').click(function() {
+					curColor = colorYellow;
+				});
+				$('#pink').click(function() {
+					curColor = colorPink;
+				});
+
+				$('#clear').click(function() {
+					clearCanvas();
+				});
+
+				$('#canvas').mousedown(function(e) {
+					var mouseX = e.pageX - this.offsetLeft;
+					var mouseY = e.pageY - this.offsetTop;
+					paint = true;
+					addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+					redraw();
+				});
+
+				$('#canvas').mousemove(function(e) {
+					if(paint) {
+						addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+						redraw();
+					}
+				});
+
+				$('#canvas').mouseup(function(e) {
+					paint = false;
+				});
+
+				$('#canvas').mouseleave(function(e) {
+					paint = false;
+				});
+
+				var clickX = new Array();
+				var clickY = new Array();
+				var clickDrag = new Array();
+				var paint;
+
+				function addClick(x, y, dragging)
+				{
+					clickX.push(x);
+					clickY.push(y);
+					clickDrag.push(dragging);
+					clickColor.push(curColor);
+				}
+
+				function redraw() {
+					// console.log(clickX)
+					// clearCanvas();
+					// context.clearRect(0, 0, context.canvas.width, context.canvas.height); //clears canvas
+					context.clearRect(0, 0, canvasWidth, canvasHeight);
+
+					// context.strokeStyle = 'slateblue';
+					context.lineJoin = "round";
+					context.lineWidth = 10;
+
+					for(var i=0; i<clickX.length; i++) {
+						context.beginPath();
+						if(clickDrag[i] && i) {
+							context.moveTo(clickX[i-1], clickY[i-1]);
+						} else {
+							context.moveTo(clickX[i]-1, clickY[i]);
+						}
+						context.lineTo(clickX[i], clickY[i]);
+						context.closePath();
+						context.strokeStyle = clickColor[i];
+						context.stroke();
+					}
+				}
+
+				function clearCanvas()
+				{
+					context.clearRect(0, 0, canvasWidth, canvasHeight);
+					clickX.length = 0;
+					clickY.length = 0;
+					clickDrag.length = 0;
+					clickColor.length = 0;
+				}
+
+
+
+
+
+
+
+			});
+		</script>
+	</head>
+	<body>
+		<canvas id="canvas" width="600" height="400"></canvas>
+		<div id="color_picker">
+			<div class="color_choice" id="purple"></div>
+			<div class="color_choice" id="blue"></div>
+			<div class="color_choice" id="green"></div>
+			<div class="color_choice" id="yellow"></div>
+			<div class="color_choice" id="pink"></div>
+		
+		<button id="clear">Clear</button>
+		</div>
+		
+	</body>
+</html>

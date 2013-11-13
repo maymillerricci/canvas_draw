@@ -27,10 +27,12 @@
 			var curTool = null;
 			var clickAlpha = new Array();
 			var curAlpha = 1;
-
+			var curMode = 'draw';
 
 			$(document).ready(function() {
-				
+
+				//set 2d context
+				context = document.getElementById('canvas').getContext('2d');
 
 				//set height and width of canvas
 				$('#canvas').attr({
@@ -38,16 +40,29 @@
 					height: canvasHeight
 				});
 
-				//set 2d context
-				context = document.getElementById('canvas').getContext('2d');
-
-				//drawing - on mousedown
+				//on mousedown - different actions for drawing and line modes
 				$(document).on('mousedown', '#canvas', function(e) {
-					e.preventDefault();
-					var mouseX = e.pageX - this.offsetLeft;
-					var mouseY = e.pageY - this.offsetTop;
-					paint = true;
-					addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+						e.preventDefault();
+						var mouseX = e.pageX - this.offsetLeft;
+						var mouseY = e.pageY - this.offsetTop;
+					if(curMode == 'draw') {
+						paint = true;
+					} else if(curMode == 'line') {
+				        if(needFirstPoint) {
+					        context.beginPath();
+					        context.moveTo(mouseX, mouseY);
+					        needFirstPoint = false;
+			    		}
+				    	else {
+				        	context.lineTo(mouseX, mouseY);
+				        	context.strokeStyle = curColor;
+							context.lineWidth = curSize;
+							context.globalAlpha = 1;
+				        	context.stroke();
+				        	needFirstPoint = true;
+				    	}
+					}
+					addClick(mouseX, mouseY);
 					redraw();
 				});
 
@@ -97,7 +112,7 @@
 
 				//redraw function
 				function redraw() {
-					context.clearRect(0, 0, canvasWidth, canvasHeight);
+					// context.clearRect(0, 0, canvasWidth, canvasHeight);
 					context.lineJoin = "round";
 					for(var i=0; i<clickX.length; i++) {
 						context.beginPath();
@@ -127,6 +142,7 @@
 				// 	$('.choice').removeClass('highlight');
 				// 	$(this).addClass('highlight');
 				// }
+
 				//change current color when click on colors in color picker
 				$(document).on('click', '#purple', function() {
 					curColor = colorPurple;
@@ -134,7 +150,7 @@
 				});
 				$(document).on('click', '#blue', function() {
 					curColor = colorBlue;
-					$('.choice').removeClass('highlight');
+					// $('.choice').removeClass('highlight');
 					// highlight();
 				});
 				$(document).on('click', '#green', function() {
@@ -163,14 +179,32 @@
 
 				//change current tool when click on options in tool picker
 				$(document).on('click', '#marker', function() {
+					curTool = 'marker';
 					curAlpha = 1;
+					if(curColor == 'white') {
+						curColor = colorPurple;
+					}
 				});
 				$(document).on('click', '#crayon', function() {
+					curTool = 'crayon';
 					curAlpha = 0.4;
+					if(curColor == 'white') {
+						curColor = colorPurple;
+					}
 				});
 				$(document).on('click', '#eraser', function() {
 					curTool = 'eraser';
 					curAlpha = 1;
+				});
+
+				//change mode when click on options in mode picker
+				$(document).on('click', '#draw', function() {
+					curMode = 'draw';
+					needFirstPoint = true;
+				});
+				$(document).on('click', '#line', function() {
+					curMode = 'line';
+					needFirstPoint = true;
 				});
 
 				//change color of font weight options depending on current color
@@ -234,6 +268,7 @@
 			<div class="choice" id="eraser">eraser</div>
 		</div>
 		<div class="picker">
+			<div class="choice" id="draw">draw</div>
 			<div class="choice" id="line">line</div>
 			<div class="choice" id="triangle">triangle</div>
 			<div class="choice" id="rectangle">rectangle</div>

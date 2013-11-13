@@ -207,7 +207,7 @@
 				});
 				$(document).on('click', '#crayon', function() {
 					curTool = 'crayon';
-					curAlpha = 0.1;
+					curAlpha = 0.4;
 					if(curColor == 'white') {
 						curColor = colorPurple;
 					}
@@ -218,6 +218,7 @@
 					curTool = 'eraser';
 					curAlpha = 1;
 					$('.tool_choice').removeClass('highlight');
+					$('.color_choice').removeClass('highlight');
 					$(this).addClass('highlight')
 				});
 

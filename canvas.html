@@ -40,6 +40,9 @@
 					height: canvasHeight
 				});
 
+				//set borders on default options on page load
+				$('#purple, #normal, #marker, #draw').addClass('highlight');
+
 				//on mousedown - different actions for drawing and line modes
 				$(document).on('mousedown', '#canvas', function(e) {
 						e.preventDefault();
@@ -57,7 +60,7 @@
 				        	context.lineTo(mouseX, mouseY);
 				        	context.strokeStyle = curColor;
 							context.lineWidth = curSize;
-							context.globalAlpha = 1;
+							context.globalAlpha = curAlpha;
 				        	context.stroke();
 				        	needFirstPoint = true;
 				    	}
@@ -137,44 +140,59 @@
   			// 		}
 				}
 
-				//add highlight class - WORK ON THIS!
-				// function highlight() {
+				//add highlight class - CAN THIS BE DONE BETTER IN FUNCTIONS?
+				// function highlight(thing) {
 				// 	$('.choice').removeClass('highlight');
-				// 	$(this).addClass('highlight');
+				// 	$(thing).addClass('highlight');
 				// }
 
 				//change current color when click on colors in color picker
 				$(document).on('click', '#purple', function() {
 					curColor = colorPurple;
-					// highlight();
+					$('.color_choice').removeClass('highlight');
+					$(this).addClass('highlight');
 				});
 				$(document).on('click', '#blue', function() {
 					curColor = colorBlue;
-					// $('.choice').removeClass('highlight');
-					// highlight();
+					$('.color_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#green', function() {
 					curColor = colorGreen;
+					$('.color_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#yellow', function() {
 					curColor = colorYellow;
+					$('.color_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#pink', function() {
 					curColor = colorPink;
+					$('.color_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 
 				//change current font weight when click on options in font weight picker
 				$(document).on('click', '#small', function() {
 					curSize = 5;
+					$('.weight_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#normal', function() {
 					curSize = 15;
+					$('.weight_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#large', function() {
 					curSize = 25;
+					$('.weight_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#huge', function() {
 					curSize = 35;
+					$('.weight_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 
 				//change current tool when click on options in tool picker
@@ -184,27 +202,38 @@
 					if(curColor == 'white') {
 						curColor = colorPurple;
 					}
+					$('.tool_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#crayon', function() {
 					curTool = 'crayon';
-					curAlpha = 0.4;
+					curAlpha = 0.1;
 					if(curColor == 'white') {
 						curColor = colorPurple;
 					}
+					$('.tool_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#eraser', function() {
 					curTool = 'eraser';
 					curAlpha = 1;
+					$('.tool_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 
 				//change mode when click on options in mode picker
 				$(document).on('click', '#draw', function() {
 					curMode = 'draw';
 					needFirstPoint = true;
+					$('.mode_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 				$(document).on('click', '#line', function() {
 					curMode = 'line';
+					curAlpha = 1;
 					needFirstPoint = true;
+					$('.mode_choice').removeClass('highlight');
+					$(this).addClass('highlight')
 				});
 
 				//change color of font weight options depending on current color
@@ -248,31 +277,30 @@
 		<canvas id="canvas" width="600" height="400"></canvas> 
 		<!-- color picker -->
 		<div class="picker">
-			<div class="choice" id="purple"></div>
-			<div class="choice" id="blue"></div>
-			<div class="choice" id="green"></div>
-			<div class="choice" id="yellow"></div>
-			<div class="choice" id="pink"></div>
+			<div class="choice color_choice" id="purple"></div>
+			<div class="choice color_choice" id="blue"></div>
+			<div class="choice color_choice" id="green"></div>
+			<div class="choice color_choice" id="yellow"></div>
+			<div class="choice color_choice" id="pink"></div>
 			<button id="clear">Clear</button>
 		</div>
 		<!-- font weight picker -->
 		<div class="picker">
-			<div class="choice" id="small"><div class="line" id="line_small"></div></div>
-			<div class="choice" id="normal"><div class="line" id="line_normal"></div></div>
-			<div class="choice" id="large"><div class="line" id="line_large"></div></div>
-			<div class="choice" id="huge"><div class="line" id="line_huge"></div></div>
+			<div class="choice weight_choice" id="small"><div class="line" id="line_small"></div></div>
+			<div class="choice weight_choice" id="normal"><div class="line" id="line_normal"></div></div>
+			<div class="choice weight_choice" id="large"><div class="line" id="line_large"></div></div>
+			<div class="choice weight_choice" id="huge"><div class="line" id="line_huge"></div></div>
 		</div>
 		<div class="picker">
-			<div class="choice" id="marker">marker</div>
-			<div class="choice" id="crayon">crayon</div>
-			<div class="choice" id="eraser">eraser</div>
+			<div class="choice tool_choice" id="marker">marker</div>
+			<div class="choice tool_choice" id="crayon">crayon</div>
+			<div class="choice tool_choice" id="eraser">eraser</div>
 		</div>
 		<div class="picker">
-			<div class="choice" id="draw">draw</div>
-			<div class="choice" id="line">line</div>
-			<div class="choice" id="triangle">triangle</div>
-			<div class="choice" id="rectangle">rectangle</div>
-			<div class="choice" id="circle">circle</div>
+			<div class="choice mode_choice" id="draw">draw</div>
+			<div class="choice mode_choice" id="line">line</div>
+			<div class="choice mode_choice" id="rectangle">rectangle</div>
+			<div class="choice mode_choice" id="circle">circle</div>
 		</div>
 
 

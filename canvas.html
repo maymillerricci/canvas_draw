@@ -13,32 +13,24 @@
 			var clickX = new Array();
 			var clickY = new Array();
 			var clickDrag = new Array();
-			// var paint;
+			var paint;
 			var colorPurple = '#660099';
 			var colorBlue = '#3333CC';
 			var colorGreen = '#336633';
 			var colorYellow = '#FFFF33';
 			var colorPink = '#CC0099';
-			var curColor = colorPurple;
 			var clickColor = new Array();
-			var curSize = 10;
+			var curColor = colorPurple;
 			var clickSize = new Array();
+			var curSize = 10;
+			var clickTool = new Array();
+			var curTool = null;
+			var clickAlpha = new Array();
+			var curAlpha = 1;
+
 
 			$(document).ready(function() {
-
-				// //mouse cursor test
-				// // $(document).on('click', '#purple', function() {
-				// $('body').css('cursor', 'crosshair'); 
-				// // });
-
-				// $('#canvas:active').css('cursor', 'crosshair'); 
 				
-				// $(document).on('mousedown', '#canvas', function() {
-				// 	$('#canvas').css('cursor', 'crosshair'); 
-				// });
-				// $(document).on('mousemove', '#canvas', function() {
-				// 	$('#canvas').css('cursor', 'crosshair'); 
-				// });
 
 				//set height and width of canvas
 				$('#canvas').attr({
@@ -85,11 +77,22 @@
 				//add click function
 				function addClick(x, y, dragging)
 				{
+					if(curTool == "eraser") {
+						curColor = "white";
+					}	
 					clickX.push(x);
 					clickY.push(y);
 					clickDrag.push(dragging);
+					// if(curTool == "eraser") {
+					// 	clickColor.push("white");
+					// } 
+					// else {
+					// 	clickColor.push(curColor);
+					// }
 					clickColor.push(curColor);
 					clickSize.push(curSize);
+					clickTool.push(curTool);
+					clickAlpha.push(curAlpha);
 				}
 
 				//redraw function
@@ -107,16 +110,32 @@
 						context.closePath();
 						context.strokeStyle = clickColor[i];
 						context.lineWidth = clickSize[i];
+						context.globalAlpha = clickAlpha[i];
 						context.stroke();
 					}
+					// if(curTool == "crayon") {
+    	// 				context.globalAlpha = 0.4;
+    	// 				context.drawImage(crayonTextureImage, 0, 0, canvasWidth, canvasHeight);
+  			// 		}
+  			// 		else {
+  			// 			context.globalAlpha = 1;
+  			// 		}
 				}
 
+				//add highlight class - WORK ON THIS!
+				// function highlight() {
+				// 	$('.choice').removeClass('highlight');
+				// 	$(this).addClass('highlight');
+				// }
 				//change current color when click on colors in color picker
 				$(document).on('click', '#purple', function() {
 					curColor = colorPurple;
+					// highlight();
 				});
 				$(document).on('click', '#blue', function() {
 					curColor = colorBlue;
+					$('.choice').removeClass('highlight');
+					// highlight();
 				});
 				$(document).on('click', '#green', function() {
 					curColor = colorGreen;
@@ -142,20 +161,32 @@
 					curSize = 35;
 				});
 
-				//change color of font weight options depending on current color
-				$(document).on('click', '.color_choice', function() {
-					if(curColor==colorPurple) {
-						$('.line').css('background-color', colorPurple);
-					} else if(curColor==colorBlue) {
-						$('.line').css('background-color', colorBlue);
-					} else if(curColor==colorGreen) {
-						$('.line').css('background-color', colorGreen);
-					} else if(curColor==colorYellow) {
-						$('.line').css('background-color', colorYellow);
-					} else if(curColor==colorPink) {
-						$('.line').css('background-color', colorPink);
-					}
+				//change current tool when click on options in tool picker
+				$(document).on('click', '#marker', function() {
+					curAlpha = 1;
 				});
+				$(document).on('click', '#crayon', function() {
+					curAlpha = 0.4;
+				});
+				$(document).on('click', '#eraser', function() {
+					curTool = 'eraser';
+					curAlpha = 1;
+				});
+
+				//change color of font weight options depending on current color
+				// $(document).on('click', '.color_choice', function() {
+				// 	if(curColor==colorPurple) {
+				// 		$('.line').css('background-color', colorPurple);
+				// 	} else if(curColor==colorBlue) {
+				// 		$('.line').css('background-color', colorBlue);
+				// 	} else if(curColor==colorGreen) {
+				// 		$('.line').css('background-color', colorGreen);
+				// 	} else if(curColor==colorYellow) {
+				// 		$('.line').css('background-color', colorYellow);
+				// 	} else if(curColor==colorPink) {
+				// 		$('.line').css('background-color', colorPink);
+				// 	}
+				// });
 				
 				//clear canvas when click clear button (confirm first)
 				$(document).on('click', '#clear', function() {
@@ -173,6 +204,7 @@
 					clickDrag.length = 0;
 					clickColor.length = 0;
 					clickSize.length = 0;
+					// clickTool.length = 0;
 				}
 			});
 		</script>
@@ -181,20 +213,31 @@
 		<!-- canvas -->
 		<canvas id="canvas" width="600" height="400"></canvas> 
 		<!-- color picker -->
-		<div id="color_picker">
-			<div class="color_choice" id="purple"></div>
-			<div class="color_choice" id="blue"></div>
-			<div class="color_choice" id="green"></div>
-			<div class="color_choice" id="yellow"></div>
-			<div class="color_choice" id="pink"></div>
+		<div class="picker">
+			<div class="choice" id="purple"></div>
+			<div class="choice" id="blue"></div>
+			<div class="choice" id="green"></div>
+			<div class="choice" id="yellow"></div>
+			<div class="choice" id="pink"></div>
 			<button id="clear">Clear</button>
 		</div>
 		<!-- font weight picker -->
-		<div id="weight_picker">
-			<div class="line_choice" id="small"><div class="line" id="line_small"></div></div>
-			<div class="line_choice" id="normal"><div class="line" id="line_normal"></div></div>
-			<div class="line_choice" id="large"><div class="line" id="line_large"></div></div>
-			<div class="line_choice" id="huge"><div class="line" id="line_huge"></div></div>
+		<div class="picker">
+			<div class="choice" id="small"><div class="line" id="line_small"></div></div>
+			<div class="choice" id="normal"><div class="line" id="line_normal"></div></div>
+			<div class="choice" id="large"><div class="line" id="line_large"></div></div>
+			<div class="choice" id="huge"><div class="line" id="line_huge"></div></div>
+		</div>
+		<div class="picker">
+			<div class="choice" id="marker">marker</div>
+			<div class="choice" id="crayon">crayon</div>
+			<div class="choice" id="eraser">eraser</div>
+		</div>
+		<div class="picker">
+			<div class="choice" id="line">line</div>
+			<div class="choice" id="triangle">triangle</div>
+			<div class="choice" id="rectangle">rectangle</div>
+			<div class="choice" id="circle">circle</div>
 		</div>
 
 

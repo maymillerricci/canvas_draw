@@ -15,6 +15,9 @@ div.picker {
 	margin: 10px;
 	border: 1px solid black;
 }
+.choice.drag_choice {
+	position: absolute;
+}
 .highlight {
 	margin: 7px 0px 0px 7px;
 	border: 4px solid black;

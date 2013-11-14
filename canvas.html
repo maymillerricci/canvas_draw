@@ -5,6 +5,7 @@
 		<title>May's Canvas</title>
 		<link rel="stylesheet" href="canvas.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 		<script src="CanvasInput.js"></script>
 		<script>
 
@@ -330,6 +331,14 @@
 				// 		$('.line').css('background-color', colorPink);
 				// 	}
 				// });
+
+				//draggable test
+				$(".draggable").draggable();
+
+				$(document).on('mousedown', '.draggable', function() {
+					$('#drag_picker').append("<div class='choice drag_choice draggable'>drag</div>");
+					$(".draggable").draggable();
+				});
 				
 				//clear canvas when click clear button (confirm first)
 				$(document).on('click', '#clear', function() {
@@ -382,6 +391,11 @@
 			<div class="choice mode_choice" id="rectangle">rectangle</div>
 			<div class="choice mode_choice" id="circle">circle</div>
 			<div class="choice mode_choice" id="text">text</div>
+		</div>
+		<div class="picker" id="drag_picker">
+			<div class = "choice drag_choice draggable">drag</div>
+			<!-- <div class = "choice drag_choice" id="draggable">drag</div> -->
+
 		</div>
 
 

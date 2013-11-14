@@ -5,6 +5,7 @@
 		<title>May's Canvas</title>
 		<link rel="stylesheet" href="canvas.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="CanvasInput.js"></script>
 		<script>
 
 			//set all variables
@@ -50,6 +51,8 @@
 						var mouseY = e.pageY - this.offsetTop;
 					if(curMode == 'draw') {
 						paint = true;
+						addClick(mouseX, mouseY);
+						redraw();
 					} else if(curMode == 'line') {
 				        if(needFirstPoint) {
 					        // context.beginPath();
@@ -64,6 +67,8 @@
 				        	context.stroke();
 				        	needFirstPoint = true;
 				    	} 
+				    	addClick(mouseX, mouseY);
+						redraw();
 				    } else if(curMode == 'rectangle') {
 				    		var mouseA = e.pageX - this.offsetLeft;
 							var mouseB = e.pageY - this.offsetTop;
@@ -83,6 +88,8 @@
 				        	context.stroke();
 				        	needFirstPoint = true;
 				    	}
+				    	addClick(mouseX, mouseY);
+						redraw();
 					} else if(curMode == 'circle') {
 				        if(needFirstPoint) {
 					        // context.beginPath();
@@ -100,10 +107,26 @@
 							context.globalAlpha = curAlpha;
 				        	context.stroke();
 				        	needFirstPoint = true;
-				    	}
-					} 
-					addClick(mouseX, mouseY);
-					redraw();
+				    	} 
+				    	addClick(mouseX, mouseY);
+						redraw();
+					} else if (curMode == 'text') {
+						// paint=false;
+				    	// console.log('text');
+				    	// console.log(mouseX);
+				    	// console.log(mouseY);
+				    	
+
+						var input = new CanvasInput({
+  							canvas: document.getElementById('canvas'),
+  							x: mouseX,
+  							y: mouseY
+						});
+
+				    	// context.fillText("Hello World!",mouseX,mouseY);
+				    }
+					// addClick(mouseX, mouseY);
+					// redraw();
 				});
 
 				//drawing - on mousemove
@@ -287,6 +310,11 @@
 					$('.mode_choice').removeClass('highlight');
 					$(this).addClass('highlight')
 				});
+				$(document).on('click', '#text', function() {
+					curMode = 'text';
+					$('.mode_choice').removeClass('highlight');
+					$(this).addClass('highlight')
+				});
 
 				//change color of font weight options depending on current color
 				// $(document).on('click', '.color_choice', function() {
@@ -353,6 +381,7 @@
 			<div class="choice mode_choice" id="line">line</div>
 			<div class="choice mode_choice" id="rectangle">rectangle</div>
 			<div class="choice mode_choice" id="circle">circle</div>
+			<div class="choice mode_choice" id="text">text</div>
 		</div>
 
 

@@ -43,7 +43,7 @@
 				//set borders on default options on page load
 				$('#purple, #normal, #marker, #draw').addClass('highlight');
 
-				//on mousedown - different actions for drawing and line modes
+				//on mousedown - different actions for drawing, line, circle, rectangle modes - WORK ON!!!
 				$(document).on('mousedown', '#canvas', function(e) {
 						e.preventDefault();
 						var mouseX = e.pageX - this.offsetLeft;
@@ -52,8 +52,8 @@
 						paint = true;
 					} else if(curMode == 'line') {
 				        if(needFirstPoint) {
-					        context.beginPath();
-					        context.moveTo(mouseX, mouseY);
+					        // context.beginPath();
+					        // context.moveTo(mouseX, mouseY);
 					        needFirstPoint = false;
 			    		}
 				    	else {
@@ -63,8 +63,45 @@
 							context.globalAlpha = curAlpha;
 				        	context.stroke();
 				        	needFirstPoint = true;
+				    	} 
+				    } else if(curMode == 'rectangle') {
+				    		var mouseA = e.pageX - this.offsetLeft;
+							var mouseB = e.pageY - this.offsetTop;
+							// console.log(mouseA);
+				        if(needFirstPoint) {
+					        // context.beginPath();
+					        // context.moveTo(mouseX, mouseY);
+					        needFirstPoint = false;
+					        return mouseA;
+			    		}
+				    	else {
+				    		// console.log(mouseA);
+				    		context.rect(mouseX, mouseY, mouseA, mouseB);
+				        	context.strokeStyle = curColor;
+							context.lineWidth = curSize;
+							context.globalAlpha = curAlpha;
+				        	context.stroke();
+				        	needFirstPoint = true;
 				    	}
-					}
+					} else if(curMode == 'circle') {
+				        if(needFirstPoint) {
+					        // context.beginPath();
+					        // context.moveTo(mouseX, mouseY);
+					        needFirstPoint = false;
+			    		}
+				    	else {
+				    		// console.log(mouseX);
+				    		// console.log(mouseY);
+				    		// arc(x,y,r,start,stop)
+				    		context.arc(mouseX, mouseY, 50, 0, 2*Math.PI);
+				        	// context.arc(mouseX, mouseY, 100, 0, 2*Math.PI);
+				        	context.strokeStyle = curColor;
+							context.lineWidth = curSize;
+							context.globalAlpha = curAlpha;
+				        	context.stroke();
+				        	needFirstPoint = true;
+				    	}
+					} 
 					addClick(mouseX, mouseY);
 					redraw();
 				});
@@ -115,7 +152,7 @@
 
 				//redraw function
 				function redraw() {
-					// context.clearRect(0, 0, canvasWidth, canvasHeight);
+					// context.clearRect(0, 0, canvasWidth, canvasHeight); //comment out makes crayon not work, comment in makes line not work
 					context.lineJoin = "round";
 					for(var i=0; i<clickX.length; i++) {
 						context.beginPath();
@@ -231,6 +268,20 @@
 				});
 				$(document).on('click', '#line', function() {
 					curMode = 'line';
+					curAlpha = 1;
+					needFirstPoint = true;
+					$('.mode_choice').removeClass('highlight');
+					$(this).addClass('highlight')
+				});
+				$(document).on('click', '#rectangle', function() {
+					curMode = 'rectangle';
+					curAlpha = 1;
+					needFirstPoint = true;
+					$('.mode_choice').removeClass('highlight');
+					$(this).addClass('highlight')
+				});
+				$(document).on('click', '#circle', function() {
+					curMode = 'circle';
 					curAlpha = 1;
 					needFirstPoint = true;
 					$('.mode_choice').removeClass('highlight');

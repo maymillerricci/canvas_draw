@@ -43,6 +43,9 @@
 				//set borders on default options on page load
 				$('#purple, #normal, #marker').addClass('highlight');
 
+				//make first draggable
+				drag();
+
 				//drawing - on mousedown
 				$(document).on('mousedown', '#canvas', function(e) {
 					var mouseX = e.pageX - this.offsetLeft;
@@ -198,12 +201,14 @@
 				// 	}
 				// });
 
-				//draggable test
-				$(".draggable").draggable();
+				//draggable
+				function drag() {
+					$('#drag_picker').append("<div class='choice draggable'>drag</div>");
+					$(".draggable").draggable();
+				}
 
 				$(document).on('mousedown', '.draggable', function() {
-					$('#drag_picker').append("<div class='choice drag_choice draggable'>drag</div>");
-					$(".draggable").draggable();
+					drag();
 				});
 				
 				//clear canvas when click clear button (confirm first)
@@ -222,6 +227,8 @@
 					clickDrag.length = 0;
 					clickColor.length = 0;
 					clickSize.length = 0;
+					$('.draggable').remove();
+					drag();
 				}
 			});
 		</script>
@@ -253,7 +260,7 @@
 		</div>
 		<!-- stamps -->
 		<div class="picker" id="drag_picker">
-			<div class = "choice choice_drag draggable">drag</div>
+			<!-- drags go here -->
 		</div>
 
 

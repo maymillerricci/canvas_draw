@@ -12,7 +12,7 @@ div.picker {
 	margin: 10px;
 	border: 1px solid black;
 }
-.choice.choice_drag {
+.draggable {
 	position: absolute;
 }
 .highlight {

@@ -3,9 +3,6 @@
 	float: left;
 	cursor: crosshair;
 }
-/*#canvas, #canvas:active, #canvas:focus {
-	cursor: crosshair;
-}*/
 div.picker {
 	float: left;
 }
@@ -15,7 +12,7 @@ div.picker {
 	margin: 10px;
 	border: 1px solid black;
 }
-.choice.drag_choice {
+.choice.choice_drag {
 	position: absolute;
 }
 .highlight {

@@ -6,7 +6,6 @@
 		<link rel="stylesheet" href="canvas.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-		<script src="CanvasInput.js"></script>
 		<script>
 
 			//set all variables
@@ -29,7 +28,6 @@
 			var curTool = null;
 			var clickAlpha = new Array();
 			var curAlpha = 1;
-			var curMode = 'draw';
 
 			$(document).ready(function() {
 
@@ -43,97 +41,23 @@
 				});
 
 				//set borders on default options on page load
-				$('#purple, #normal, #marker, #draw').addClass('highlight');
+				$('#purple, #normal, #marker').addClass('highlight');
 
-				//on mousedown - different actions for drawing, line, circle, rectangle modes - WORK ON!!!
+				//drawing - on mousedown
 				$(document).on('mousedown', '#canvas', function(e) {
-						e.preventDefault();
-						var mouseX = e.pageX - this.offsetLeft;
-						var mouseY = e.pageY - this.offsetTop;
-					if(curMode == 'draw') {
-						paint = true;
-						addClick(mouseX, mouseY);
-						redraw();
-					} else if(curMode == 'line') {
-				        if(needFirstPoint) {
-					        // context.beginPath();
-					        // context.moveTo(mouseX, mouseY);
-					        needFirstPoint = false;
-			    		}
-				    	else {
-				        	context.lineTo(mouseX, mouseY);
-				        	context.strokeStyle = curColor;
-							context.lineWidth = curSize;
-							context.globalAlpha = curAlpha;
-				        	context.stroke();
-				        	needFirstPoint = true;
-				    	} 
-				    	addClick(mouseX, mouseY);
-						redraw();
-				    } else if(curMode == 'rectangle') {
-				    		var mouseA = e.pageX - this.offsetLeft;
-							var mouseB = e.pageY - this.offsetTop;
-							// console.log(mouseA);
-				        if(needFirstPoint) {
-					        // context.beginPath();
-					        // context.moveTo(mouseX, mouseY);
-					        needFirstPoint = false;
-					        return mouseA;
-			    		}
-				    	else {
-				    		// console.log(mouseA);
-				    		context.rect(mouseX, mouseY, mouseA, mouseB);
-				        	context.strokeStyle = curColor;
-							context.lineWidth = curSize;
-							context.globalAlpha = curAlpha;
-				        	context.stroke();
-				        	needFirstPoint = true;
-				    	}
-				    	addClick(mouseX, mouseY);
-						redraw();
-					} else if(curMode == 'circle') {
-				        if(needFirstPoint) {
-					        // context.beginPath();
-					        // context.moveTo(mouseX, mouseY);
-					        needFirstPoint = false;
-			    		}
-				    	else {
-				    		// console.log(mouseX);
-				    		// console.log(mouseY);
-				    		// arc(x,y,r,start,stop)
-				    		context.arc(mouseX, mouseY, 50, 0, 2*Math.PI);
-				        	// context.arc(mouseX, mouseY, 100, 0, 2*Math.PI);
-				        	context.strokeStyle = curColor;
-							context.lineWidth = curSize;
-							context.globalAlpha = curAlpha;
-				        	context.stroke();
-				        	needFirstPoint = true;
-				    	} 
-				    	addClick(mouseX, mouseY);
-						redraw();
-					} else if (curMode == 'text') {
-						// paint=false;
-				    	// console.log('text');
-				    	// console.log(mouseX);
-				    	// console.log(mouseY);
-				    	
-
-						var input = new CanvasInput({
-  							canvas: document.getElementById('canvas'),
-  							x: mouseX,
-  							y: mouseY
-						});
-
-				    	// context.fillText("Hello World!",mouseX,mouseY);
-				    }
-					// addClick(mouseX, mouseY);
-					// redraw();
+					var mouseX = e.pageX - this.offsetLeft;
+					var mouseY = e.pageY - this.offsetTop;
+					paint = true;
+					addClick(mouseX, mouseY);
+					redraw();
 				});
-
+					
 				//drawing - on mousemove
 				$(document).on('mousemove', '#canvas', function(e) {
 					if(paint) {
-						addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+						var mouseX = e.pageX - this.offsetLeft;
+						var mouseY = e.pageY - this.offsetTop;
+						addClick(mouseX, mouseY, true);
 						redraw();
 					}
 				});
@@ -148,7 +72,7 @@
 					paint = false;
 				});
 
-				//drawing - on mouse re-entering the canvas - WORK ON THIS!!!
+				//drawing - on mouse re-entering the canvas - WORK ON THIS!!!?
 				// $(document).on('mouseenter', '#canvas', function(e) {
 				// 	paint = true;
 				// });
@@ -162,12 +86,6 @@
 					clickX.push(x);
 					clickY.push(y);
 					clickDrag.push(dragging);
-					// if(curTool == "eraser") {
-					// 	clickColor.push("white");
-					// } 
-					// else {
-					// 	clickColor.push(curColor);
-					// }
 					clickColor.push(curColor);
 					clickSize.push(curSize);
 					clickTool.push(curTool);
@@ -176,7 +94,7 @@
 
 				//redraw function
 				function redraw() {
-					// context.clearRect(0, 0, canvasWidth, canvasHeight); //comment out makes crayon not work, comment in makes line not work
+					context.clearRect(0, 0, canvasWidth, canvasHeight);
 					context.lineJoin = "round";
 					for(var i=0; i<clickX.length; i++) {
 						context.beginPath();
@@ -192,68 +110,53 @@
 						context.globalAlpha = clickAlpha[i];
 						context.stroke();
 					}
-					// if(curTool == "crayon") {
-    	// 				context.globalAlpha = 0.4;
-    	// 				context.drawImage(crayonTextureImage, 0, 0, canvasWidth, canvasHeight);
-  			// 		}
-  			// 		else {
-  			// 			context.globalAlpha = 1;
-  			// 		}
 				}
 
-				//add highlight class - CAN THIS BE DONE BETTER IN FUNCTIONS?
-				// function highlight(thing) {
-				// 	$('.choice').removeClass('highlight');
-				// 	$(thing).addClass('highlight');
-				// }
+				//add highlight class for border
+				function highlight(choice) {
+					var choice_class = choice.attr('class').substr(7,10);
+					$('.' + choice_class).removeClass('highlight');
+					$(choice).addClass('highlight');
+				}
 
 				//change current color when click on colors in color picker
 				$(document).on('click', '#purple', function() {
 					curColor = colorPurple;
-					$('.color_choice').removeClass('highlight');
-					$(this).addClass('highlight');
+					highlight($(this));
 				});
 				$(document).on('click', '#blue', function() {
 					curColor = colorBlue;
-					$('.color_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					highlight($(this));
 				});
 				$(document).on('click', '#green', function() {
 					curColor = colorGreen;
-					$('.color_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					highlight($(this));
 				});
 				$(document).on('click', '#yellow', function() {
 					curColor = colorYellow;
-					$('.color_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					highlight($(this));
 				});
 				$(document).on('click', '#pink', function() {
 					curColor = colorPink;
-					$('.color_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					highlight($(this));
 				});
 
 				//change current font weight when click on options in font weight picker
 				$(document).on('click', '#small', function() {
-					curSize = 5;
-					$('.weight_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					curSize = 4;
+					highlight($(this));
 				});
 				$(document).on('click', '#normal', function() {
-					curSize = 15;
-					$('.weight_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					curSize = 10;
+					highlight($(this));
 				});
 				$(document).on('click', '#large', function() {
-					curSize = 25;
-					$('.weight_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					curSize = 17;
+					highlight($(this));
 				});
 				$(document).on('click', '#huge', function() {
-					curSize = 35;
-					$('.weight_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					curSize = 23;
+					highlight($(this));
 				});
 
 				//change current tool when click on options in tool picker
@@ -263,8 +166,7 @@
 					if(curColor == 'white') {
 						curColor = colorPurple;
 					}
-					$('.tool_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					highlight($(this));
 				});
 				$(document).on('click', '#crayon', function() {
 					curTool = 'crayon';
@@ -272,53 +174,17 @@
 					if(curColor == 'white') {
 						curColor = colorPurple;
 					}
-					$('.tool_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					highlight($(this));
 				});
 				$(document).on('click', '#eraser', function() {
 					curTool = 'eraser';
 					curAlpha = 1;
-					$('.tool_choice').removeClass('highlight');
-					$('.color_choice').removeClass('highlight');
-					$(this).addClass('highlight')
+					highlight($(this));
+					$('.choice_col').removeClass('highlight');
 				});
 
-				//change mode when click on options in mode picker
-				$(document).on('click', '#draw', function() {
-					curMode = 'draw';
-					needFirstPoint = true;
-					$('.mode_choice').removeClass('highlight');
-					$(this).addClass('highlight')
-				});
-				$(document).on('click', '#line', function() {
-					curMode = 'line';
-					curAlpha = 1;
-					needFirstPoint = true;
-					$('.mode_choice').removeClass('highlight');
-					$(this).addClass('highlight')
-				});
-				$(document).on('click', '#rectangle', function() {
-					curMode = 'rectangle';
-					curAlpha = 1;
-					needFirstPoint = true;
-					$('.mode_choice').removeClass('highlight');
-					$(this).addClass('highlight')
-				});
-				$(document).on('click', '#circle', function() {
-					curMode = 'circle';
-					curAlpha = 1;
-					needFirstPoint = true;
-					$('.mode_choice').removeClass('highlight');
-					$(this).addClass('highlight')
-				});
-				$(document).on('click', '#text', function() {
-					curMode = 'text';
-					$('.mode_choice').removeClass('highlight');
-					$(this).addClass('highlight')
-				});
-
-				//change color of font weight options depending on current color
-				// $(document).on('click', '.color_choice', function() {
+				// //change color of font weight options depending on current color - use this or not???
+				// $(document).on('click', '.choice_col', function() {
 				// 	if(curColor==colorPurple) {
 				// 		$('.line').css('background-color', colorPurple);
 				// 	} else if(curColor==colorBlue) {
@@ -356,46 +222,38 @@
 					clickDrag.length = 0;
 					clickColor.length = 0;
 					clickSize.length = 0;
-					// clickTool.length = 0;
 				}
 			});
 		</script>
 	</head>
 	<body>
 		<!-- canvas -->
-		<canvas id="canvas" width="600" height="400"></canvas> 
+		<canvas id="canvas"></canvas> 
 		<!-- color picker -->
 		<div class="picker">
-			<div class="choice color_choice" id="purple"></div>
-			<div class="choice color_choice" id="blue"></div>
-			<div class="choice color_choice" id="green"></div>
-			<div class="choice color_choice" id="yellow"></div>
-			<div class="choice color_choice" id="pink"></div>
+			<div class="choice choice_col" id="purple"></div>
+			<div class="choice choice_col" id="blue"></div>
+			<div class="choice choice_col" id="green"></div>
+			<div class="choice choice_col" id="yellow"></div>
+			<div class="choice choice_col" id="pink"></div>
 			<button id="clear">Clear</button>
 		</div>
 		<!-- font weight picker -->
 		<div class="picker">
-			<div class="choice weight_choice" id="small"><div class="line" id="line_small"></div></div>
-			<div class="choice weight_choice" id="normal"><div class="line" id="line_normal"></div></div>
-			<div class="choice weight_choice" id="large"><div class="line" id="line_large"></div></div>
-			<div class="choice weight_choice" id="huge"><div class="line" id="line_huge"></div></div>
+			<div class="choice choice_wgt" id="small"><div class="line" id="line_small"></div></div>
+			<div class="choice choice_wgt" id="normal"><div class="line" id="line_normal"></div></div>
+			<div class="choice choice_wgt" id="large"><div class="line" id="line_large"></div></div>
+			<div class="choice choice_wgt" id="huge"><div class="line" id="line_huge"></div></div>
 		</div>
+		<!-- tool picker -->
 		<div class="picker">
-			<div class="choice tool_choice" id="marker">marker</div>
-			<div class="choice tool_choice" id="crayon">crayon</div>
-			<div class="choice tool_choice" id="eraser">eraser</div>
+			<div class="choice choice_tol" id="marker">marker</div>
+			<div class="choice choice_tol" id="crayon">crayon</div>
+			<div class="choice choice_tol" id="eraser">eraser</div>
 		</div>
-		<div class="picker">
-			<div class="choice mode_choice" id="draw">draw</div>
-			<div class="choice mode_choice" id="line">line</div>
-			<div class="choice mode_choice" id="rectangle">rectangle</div>
-			<div class="choice mode_choice" id="circle">circle</div>
-			<div class="choice mode_choice" id="text">text</div>
-		</div>
+		<!-- stamps -->
 		<div class="picker" id="drag_picker">
-			<div class = "choice drag_choice draggable">drag</div>
-			<!-- <div class = "choice drag_choice" id="draggable">drag</div> -->
-
+			<div class = "choice choice_drag draggable">drag</div>
 		</div>
 
 

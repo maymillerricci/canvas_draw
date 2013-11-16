@@ -7,7 +7,7 @@
 	float: left;
 	cursor: crosshair;
 	background-color: white;
-	margin: 5px 10px 5px 20px;
+	margin: 5px 10px 5px 10px;
 }
 div.picker {
 	float: left;
@@ -29,7 +29,7 @@ div.picker {
 	margin: 10px;
 }
 #drag_picker {
-	margin-left: 20px;
+	margin-left: 5px;
 	clear: both;
 }
 .highlight {

@@ -44,9 +44,16 @@
 					$('#purple, #normal, #marker').addClass('highlight');
 
 					//load images in stamp picker
-					$('#img1').append("<img class='draggable' src='assets/images/apple.png'>");
-					$('#img2').append("<img class='draggable' src='assets/images/goldfish.png'>");
-					$('#img3').append("<img class='draggable' src='assets/images/ninja.png'>");
+					$('#img1').append("<img class='draggable new_stamp' src='assets/images/butterfly.png'>");
+					$('#img2').append("<img class='draggable new_stamp' src='assets/images/apple.png'>");
+					$('#img3').append("<img class='draggable new_stamp' src='assets/images/goldfish.png'>");
+					$('#img4').append("<img class='draggable new_stamp' src='assets/images/sun.png'>");
+					$('#img5').append("<img class='draggable new_stamp' src='assets/images/tree.png'>");
+					$('#img6').append("<img class='draggable new_stamp' src='assets/images/earth.png'>");
+					$('#img7').append("<img class='draggable new_stamp' src='assets/images/octopus.png'>");
+					$('#img8').append("<img class='draggable new_stamp' src='assets/images/teddybear.png'>");
+					$('#img9').append("<img class='draggable new_stamp' src='assets/images/ninja.png'>");
+					$('#img10').append("<img class='draggable new_stamp' src='assets/images/whale.png'>");
 					$(".draggable").draggable();
 				}
 
@@ -232,10 +239,11 @@
 				// });
 
 				//draggable - make stamps draggable and when one is dragged replace with new one
-				$(document).on('vmousedown', '.draggable', function() {
+				$(document).on('vmousedown', '.new_stamp', function() {
+					$(this).removeClass('new_stamp');
 					var img_path = $(this).attr('src');
 					var stamp_id = $(this).parent().attr('id');
-					$('#' + stamp_id).append("<img class='draggable' src='" + img_path + "'>");
+					$('#' + stamp_id).append("<img class='draggable new_stamp' src='" + img_path + "'>");
 					$(".draggable").draggable();
 				});
 				
@@ -292,6 +300,13 @@
 			<div class="img" id="img1"></div>
 			<div class="img" id="img2"></div>
 			<div class="img" id="img3"></div>
+			<div class="img" id="img4"></div>
+			<div class="img" id="img5"></div>
+			<div class="img" id="img6"></div>
+			<div class="img" id="img7"></div>
+			<div class="img" id="img8"></div>
+			<div class="img" id="img9"></div>
+			<div class="img" id="img10"></div>
 		</div>
 
 

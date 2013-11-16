@@ -140,6 +140,14 @@
 					$(choice).addClass('highlight');
 				}
 
+				$(document).on('vclick', '.choice_col', function() {
+					if(curTool == 'eraser') {
+						curTool = 'marker';
+						$('#eraser').removeClass('highlight');
+						$('#marker').addClass('highlight');
+					}
+				});
+
 				//change current color when click on colors in color picker
 				$(document).on('vclick', '#purple', function() {
 					curColor = colorPurple;

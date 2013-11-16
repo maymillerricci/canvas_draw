@@ -1,8 +1,13 @@
+.ui-body-c {
+	background-image: none;
+	background-color: white;
+}
 #canvas {
 	border: 3px solid black;
 	float: left;
 	cursor: crosshair;
 	background-color: white;
+	margin: 5px 10px 5px 20px;
 }
 div.picker {
 	float: left;
@@ -15,6 +20,17 @@ div.picker {
 }
 .draggable {
 	position: absolute;
+	width: 60px;
+	height: 60px;
+}
+.img {
+	width: 60px;
+	display: inline-block;
+	margin: 10px;
+}
+#drag_picker {
+	margin-left: 20px;
+	clear: both;
 }
 .highlight {
 	margin: 7px 0px 0px 7px;

@@ -4,10 +4,10 @@
 		<meta charset="UTF-8">
 		<title>May's Canvas</title>
 		  <link rel="stylesheet" href="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.css">
-		<link rel="stylesheet" href="canvas.css">
+		<link rel="stylesheet" href="assets/css/canvas.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-		<script src="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script><script src= "touch_punch.js"></script>
+		<script src="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script><script src= "assets/js/touch_punch.js"></script>
 		<script>
 
 			//set all variables
@@ -43,7 +43,11 @@
 					$('.choice').removeClass('highlight');
 					$('#purple, #normal, #marker').addClass('highlight');
 
-					drag();
+					//load images in stamp picker
+					$('#img1').append("<img class='draggable' src='assets/images/apple.png'>");
+					$('#img2').append("<img class='draggable' src='assets/images/goldfish.png'>");
+					$('#img3').append("<img class='draggable' src='assets/images/ninja.png'>");
+					$(".draggable").draggable();
 				}
 
 				//set 2d context
@@ -227,14 +231,12 @@
 				// 	}
 				// });
 
-				//draggable
-				function drag() {
-					$('#drag_picker').append("<div class='choice draggable'>drag</div>");
-					$(".draggable").draggable();
-				}
-
+				//draggable - make stamps draggable and when one is dragged replace with new one
 				$(document).on('vmousedown', '.draggable', function() {
-					drag();
+					var img_path = $(this).attr('src');
+					var stamp_id = $(this).parent().attr('id');
+					$('#' + stamp_id).append("<img class='draggable' src='" + img_path + "'>");
+					$(".draggable").draggable();
 				});
 				
 				//clear canvas when click clear button (confirm first)
@@ -254,9 +256,8 @@
 					clickColor.length = 0;
 					clickSize.length = 0;
 					clickAlpha.length = 0;
-					initialize();
 					$('.draggable').remove();
-					drag();
+					initialize();
 				}
 			});
 		</script>
@@ -287,8 +288,10 @@
 			<div class="choice choice_tol" id="eraser">eraser</div>
 		</div>
 		<!-- stamps -->
-		<div class="picker" id="drag_picker">
-			<!-- drags go here -->
+		<div id="drag_picker">
+			<div class="img" id="img1"></div>
+			<div class="img" id="img2"></div>
+			<div class="img" id="img3"></div>
 		</div>
 
 

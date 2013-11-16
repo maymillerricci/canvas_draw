@@ -3,10 +3,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>May's Canvas</title>
+		  <link rel="stylesheet" href="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.css">
 		<link rel="stylesheet" href="canvas.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-		<script src="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+		<script src="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script><script src= "touch_punch.js"></script>
 		<script>
 
 			//set all variables
@@ -22,15 +23,28 @@
 			var colorYellow = '#FFFF33';
 			var colorPink = '#CC0099';
 			var clickColor = new Array();
-			var curColor = colorPurple;
+			var curColor = null;
 			var clickSize = new Array();
-			var curSize = 10;
+			var curSize = null;
 			var clickTool = new Array();
 			var curTool = null;
 			var clickAlpha = new Array();
-			var curAlpha = 1;
+			var curAlpha = null;
 
 			$(document).ready(function() {
+
+				function initialize() {
+					curColor = colorPurple;
+					curSize = 10;
+					curTool = 'marker';
+					curAlpha = 1;
+
+					//remove and set borders on default options on page load or clear
+					$('.choice').removeClass('highlight');
+					$('#purple, #normal, #marker').addClass('highlight');
+
+					drag();
+				}
 
 				//set 2d context
 				context = document.getElementById('canvas').getContext('2d');
@@ -41,11 +55,7 @@
 					height: canvasHeight
 				});
 
-				//set borders on default options on page load
-				$('#purple, #normal, #marker').addClass('highlight');
-
-				//make first draggable
-				drag();
+				initialize();
 
 				//drawing - on mousedown
 				$(document).on('vmousedown', '#canvas', function(e) {
@@ -79,6 +89,10 @@
 					paint = false;
 				});
 
+				$(document).on('vclick', '#canvas', function(e) {
+					e.preventDefault();
+				});
+
 				//drawing - on mouse re-entering the canvas - WORK ON THIS!!!?
 				// $(document).on('mouseenter', '#canvas', function(e) {
 				// 	paint = true;
@@ -95,7 +109,7 @@
 					clickDrag.push(dragging);
 					clickColor.push(curColor);
 					clickSize.push(curSize);
-					clickTool.push(curTool);
+					// clickTool.push(curTool);
 					clickAlpha.push(curAlpha);
 				}
 
@@ -216,7 +230,7 @@
 				});
 				
 				//clear canvas when click clear button (confirm first)
-				$(document).on('vclick', '#clear', function() {
+				$(document).on('click', '#clear', function() {
 					if(confirm('Are you sure you want to clear the canvas?')) {
 						clearCanvas();
 					}
@@ -231,6 +245,8 @@
 					clickDrag.length = 0;
 					clickColor.length = 0;
 					clickSize.length = 0;
+					clickAlpha.length = 0;
+					initialize();
 					$('.draggable').remove();
 					drag();
 				}

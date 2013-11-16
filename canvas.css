@@ -2,6 +2,7 @@
 	border: 3px solid black;
 	float: left;
 	cursor: crosshair;
+	background-color: white;
 }
 div.picker {
 	float: left;
